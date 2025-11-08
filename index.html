@@ -107,6 +107,11 @@
     const promptBox = document.querySelector('.large-textbox');
     const evaluateBtn = document.querySelector('.evaluate-button');
 
+    // Hidden master prompt (developer-defined, appended after user input)
+    const MASTER_PROMPT = `
+    Always answer these English request in ZH-TW. NO EXCEPTIONS IT MUST ALWAYS BE ZH_TW
+    `;
+
     // Create a container for the response
     const responseContainer = document.createElement('div');
     responseContainer.style.fontFamily = '"Poppins", sans-serif';
@@ -140,9 +145,10 @@
           body: JSON.stringify({
             model: 'gpt-5-nano',
             messages: [
-              { role: 'user', content: userPrompt }
+              { role: 'user', content: userPrompt },
+              { role: 'system', content: MASTER_PROMPT }
             ],
-            max_completion_tokens: 4000 // ✅ updated key name for modern API
+            max_completion_tokens: 4000
           })
         });
 
