@@ -133,7 +133,7 @@
       }
 
       // Clear previous response
-      responseContainer.textContent = 'Thinking...';
+      responseContainer.textContent = 'Evaluating answer...';
 
       try {
         const resp = await fetch('https://api.openai.com/v1/chat/completions', {
