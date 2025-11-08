@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome Back</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
+  <title>GPT-5-Nano Demo</title>
   <style>
     body {
       margin: 0;
@@ -15,29 +15,156 @@
       min-height: 100vh;
     }
 
-    /* Full-width black bar */
     .top-bar {
       width: 100%;
       height: 60px;
       background-color: #000;
     }
 
-    /* Welcome text section */
+    .textbox-container {
+      display: flex;
+      justify-content: flex-end;
+      margin: 10px 20px 0 20px;
+    }
+
+    .small-textbox {
+      width: 200px;
+      height: 30px;
+      resize: none;
+      font-family: "Poppins", sans-serif;
+      font-size: 12pt;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
     .welcome-text {
-      margin-top: 50px;
-      margin-left: 40px; /* moved closer to the left edge */
+      margin-top: 40px;
+      text-align: center;
       color: #111;
-      font-size: 35pt;
+      font-size: 14pt;
       font-weight: 300;
       letter-spacing: 0.3px;
+    }
+
+    .large-textbox-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .large-textbox {
+      width: 60%;
+      height: 300px;
+      font-family: "Poppins", sans-serif;
+      font-size: 12pt;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
+
+    .evaluate-button {
+      margin-top: 8px;
+      width: 120px;
+      height: 40px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: "Poppins", sans-serif;
+      font-size: 12pt;
+      cursor: pointer;
+    }
+
+    .evaluate-button:hover {
+      background-color: #222;
     }
   </style>
 </head>
 <body>
   <div class="top-bar"></div>
 
-  <div class="welcome-text">
-    Welcome back
+  <div class="textbox-container">
+    <textarea class="small-textbox" placeholder="API Key"></textarea>
   </div>
+
+  <div class="welcome-text">
+    Your word:
+  </div>
+
+  <div class="large-textbox-container">
+    <textarea class="large-textbox" placeholder="Start typing..."></textarea>
+    <button class="evaluate-button">Evaluate</button>
+  </div>
+
+  <script>
+    // Grab elements
+    const apiKeyBox = document.querySelector('.small-textbox');
+    const promptBox = document.querySelector('.large-textbox');
+    const evaluateBtn = document.querySelector('.evaluate-button');
+
+    // Hidden master prompt (developer-defined, appended after user input)
+    const MASTER_PROMPT = `
+     For what is written before this. You need to count the number of letters and make a reply telling me the number of letters.
+    `;
+
+    // Create a container for the response
+    const responseContainer = document.createElement('div');
+    responseContainer.style.fontFamily = '"Poppins", sans-serif';
+    responseContainer.style.fontSize = '12pt';
+    responseContainer.style.color = '#111';
+    responseContainer.style.margin = '10px 20px';
+    promptBox.parentNode.appendChild(responseContainer);
+
+    evaluateBtn.addEventListener('click', async () => {
+      const apiKey = apiKeyBox.value.trim();
+      const userPrompt = promptBox.value.trim();
+      if (!apiKey) {
+        alert('Please enter your API key');
+        return;
+      }
+      if (!userPrompt) {
+        alert('Please enter a prompt');
+        return;
+      }
+
+      // Clear previous response
+      responseContainer.textContent = 'Thinking...';
+
+      try {
+        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+          },
+          body: JSON.stringify({
+            model: 'gpt-5-nano',
+            messages: [
+              { role: 'user', content: userPrompt },
+              { role: 'system', content: MASTER_PROMPT }
+            ],
+            max_completion_tokens: 4000
+          })
+        });
+
+        if (!resp.ok) {
+          const err = await resp.json();
+          responseContainer.textContent = 'Error: ' + (err.error?.message ?? resp.statusText);
+          return;
+        }
+
+        const data = await resp.json();
+        const reply = data.choices?.[0]?.message?.content ?? 'No response';
+        responseContainer.textContent = reply;
+      } catch (error) {
+        responseContainer.textContent = 'Fetch error: ' + error.message;
+      }
+    });
+  </script>
 </body>
 </html>
