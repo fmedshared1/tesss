@@ -187,7 +187,7 @@
 
     // Hidden master prompt (developer-defined, appended after user input)
     const MASTER_PROMPT = `
-     You are a helpful assistant
+     You are a helpful assistant that will always answer in English
     `;
 
     // Create a container for the response
@@ -214,24 +214,28 @@
       responseContainer.textContent = 'Evaluating answer...';
 
       try {
-        const resp = await fetch('https://api.openai.com/v1/chat/completions', {
+        // DeepSeek is OpenAI-compatible; using base_url https://api.deepseek.com/v1 and the /chat/completions route.
+        const DEEPSEEK_BASE_URL = 'https://api.deepseek.com/v1';
+
+        const resp = await fetch(DEEPSEEK_BASE_URL + '/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + apiKey
           },
           body: JSON.stringify({
-            model: 'gpt-5.2',
+            model: 'deepseek-chat',
             messages: [
-              { role: 'user', content: userPrompt },
-              { role: 'system', content: MASTER_PROMPT }
+              { role: 'system', content: MASTER_PROMPT },
+              { role: 'user', content: userPrompt }
             ],
-            max_completion_tokens: 4000
+            max_tokens: 4000,
+            stream: false
           })
         });
 
         if (!resp.ok) {
-          const err = await resp.json();
+          const err = await resp.json().catch(() => ({}));
           responseContainer.textContent = 'Error: ' + (err.error?.message ?? resp.statusText);
           return;
         }
