@@ -132,19 +132,23 @@
       resize: vertical;
     }
 
-    /* ✅ Alternative technique: CSS Grid with a symmetric right spacer
-       This guarantees the question text is centered to the SAME 60% width as the large textbox. */
+    /* ✅ GUARANTEED CENTERING:
+       Use a 5-column grid with explicit columns for:
+       [arrow][gap][CENTER AREA][gap][same-width spacer]
+       Because BOTH sides (arrow + gap) are mirrored, the center area is mathematically centered
+       to the exact same 60% width as the large textbox.
+    */
     .question-row {
       width: 60%;
-      margin-top: 40px;
+      margin: 40px auto 0 auto;  /* centered container, same as large textbox width */
       display: grid;
-      grid-template-columns: 26px 1fr 26px; /* left arrow, centered text area, right spacer */
+      grid-template-columns: 26px 8px 1fr 8px 26px;
       align-items: center;
-      column-gap: 8px;
       box-sizing: border-box;
     }
 
     .question-arrow {
+      grid-column: 1;
       width: 26px;
       height: 26px;
       border: none;
@@ -164,24 +168,23 @@
       background: #222;
     }
 
-    /* This cell is exactly centered because of the equal spacer column on the right */
     .welcome-text {
+      grid-column: 3;           /* the centered area */
       color: #111;
       font-size: 10pt;
       font-weight: 300;
       letter-spacing: 0.3px;
       margin: 0;
       display: none;
-      text-align: center;   /* center aligned */
-      justify-self: stretch; /* fill middle column */
+      text-align: center;       /* center the text itself */
     }
 
     .welcome-text.show {
       display: block;
     }
 
-    /* Right spacer to keep true center; invisible but same width as arrow */
     .question-spacer {
+      grid-column: 5;
       width: 26px;
       height: 26px;
     }
@@ -223,11 +226,9 @@
 
   <div class="question-row">
     <button class="question-arrow" id="questionArrow" aria-label="Show question">▸</button>
-
     <div class="welcome-text" id="welcomeText">
       List 5 psychiatric or medical conditions that can lead to memory impairment in older people?
     </div>
-
     <div class="question-spacer" aria-hidden="true"></div>
   </div>
 
@@ -244,7 +245,7 @@
 
     // Hidden master prompt (developer-defined, appended after user input)
     const MASTER_PROMPT = `
-     You are a helpful assistant and will always answer in English
+     You are a helpful assistant that will always answer in English 
     `;
 
     // Create a container for the response
