@@ -132,13 +132,16 @@
       resize: vertical;
     }
 
-    /* Question row aligned to left border of large textbox */
+    /* ✅ Alternative technique: CSS Grid with a symmetric right spacer
+       This guarantees the question text is centered to the SAME 60% width as the large textbox. */
     .question-row {
       width: 60%;
       margin-top: 40px;
+      display: grid;
+      grid-template-columns: 26px 1fr 26px; /* left arrow, centered text area, right spacer */
+      align-items: center;
+      column-gap: 8px;
       box-sizing: border-box;
-      position: relative; /* allow absolute centering of text */
-      height: 26px; /* same as arrow height so it sits nicely */
     }
 
     .question-arrow {
@@ -155,34 +158,32 @@
       align-items: center;
       justify-content: center;
       font-family: Arial, sans-serif; /* default sans serif */
-      position: absolute;
-      left: 0;
-      top: 0;
     }
 
     .question-arrow:hover {
       background: #222;
     }
 
-    /* Truly center the question text to the large textbox width */
+    /* This cell is exactly centered because of the equal spacer column on the right */
     .welcome-text {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 100%;              /* center relative to the 60% container */
-      text-align: center;       /* center text */
       color: #111;
       font-size: 10pt;
       font-weight: 300;
       letter-spacing: 0.3px;
       margin: 0;
       display: none;
-      pointer-events: none;     /* so clicks still hit the arrow */
+      text-align: center;   /* center aligned */
+      justify-self: stretch; /* fill middle column */
     }
 
     .welcome-text.show {
       display: block;
+    }
+
+    /* Right spacer to keep true center; invisible but same width as arrow */
+    .question-spacer {
+      width: 26px;
+      height: 26px;
     }
 
     .evaluate-button {
@@ -222,9 +223,12 @@
 
   <div class="question-row">
     <button class="question-arrow" id="questionArrow" aria-label="Show question">▸</button>
+
     <div class="welcome-text" id="welcomeText">
       List 5 psychiatric or medical conditions that can lead to memory impairment in older people?
     </div>
+
+    <div class="question-spacer" aria-hidden="true"></div>
   </div>
 
   <div class="large-textbox-container">
@@ -240,7 +244,7 @@
 
     // Hidden master prompt (developer-defined, appended after user input)
     const MASTER_PROMPT = `
-     You are a helpful assistant that will always answer in English
+     You are a helpful assistant and will always answer in English
     `;
 
     // Create a container for the response
@@ -267,7 +271,6 @@
       responseContainer.textContent = 'Evaluating answer...';
 
       try {
-        // DeepSeek is OpenAI-compatible; using base_url https://api.deepseek.com/v1 and the /chat/completions route.
         const DEEPSEEK_BASE_URL = 'https://api.deepseek.com/v1';
 
         const resp = await fetch(DEEPSEEK_BASE_URL + '/chat/completions', {
