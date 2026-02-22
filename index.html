@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>First Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
+
   <style>
     body {
       margin: 0;
@@ -15,14 +16,12 @@
       min-height: 100vh;
     }
 
-    /* Full-width black bar */
     .top-bar {
       width: 100%;
       height: 60px;
       background-color: #000;
     }
 
-    /* Centered container */
     .login-container {
       flex: 1;
       display: flex;
@@ -34,11 +33,11 @@
 
     h1 {
       font-size: 32pt;
-      font-weight: 300; /* thin, elegant */
+      font-weight: 300;
       color: #111;
       letter-spacing: 0.5px;
       margin-bottom: 10px;
-      text-transform: none; /* no uppercase */
+      text-transform: none;
     }
 
     input {
@@ -64,7 +63,6 @@
       border-color: #000;
     }
 
-    /* Proceed button */
     button {
       margin-top: 20px;
       width: 280px;
@@ -84,15 +82,103 @@
       background-color: #222;
     }
   </style>
+
+  <!-- Load env.js FIRST (generated during Netlify build) -->
+  <script src="env.js"></script>
+
+  <!-- Supabase via CDN (non-ESM) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body>
   <div class="top-bar"></div>
 
   <div class="login-container">
     <h1>First Login</h1>
-    <input type="text" placeholder="Username (number)" />
-    <input type="password" placeholder="Password" />
-    <button onclick="window.location.href='hello.html'">Proceed</button>
+
+    <input id="username" type="text" placeholder="Username (number)" autocomplete="username" />
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+
+    <div id="message" style="min-height: 1.2em; color: #b00020; font-weight: 300;"></div>
+
+    <button id="loginBtn" type="button">Proceed</button>
   </div>
+
+  <script>
+    // ✅ Keep ONLY the URL in this file
+    const SUPABASE_URL = "https://ubfefmnialyjfvgpltfe.supabase.co";
+
+    // ✅ Key comes from env.js (generated during Netlify build)
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
+
+    const msg = document.getElementById("message");
+    const loginBtn = document.getElementById("loginBtn");
+    const usernameEl = document.getElementById("username");
+    const passwordEl = document.getElementById("password");
+
+    function setMessage(text) {
+      if (msg) msg.textContent = text || "";
+    }
+
+    function goToMainPage() {
+      window.location.href = "hello.html";
+    }
+
+    if (!SUPABASE_ANON_KEY) {
+      setMessage("Missing SUPABASE_ANON_KEY (env.js not generated/loaded).");
+      console.error("SUPABASE_ANON_KEY missing. Check Netlify env var + build step that generates env.js.");
+    }
+
+    const { createClient } = window.supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function handleLogin() {
+      setMessage("");
+
+      // Username is numeric (1,2,3,4...), stored in users.id
+      const usernameId = Number(usernameEl.value);
+      const password = passwordEl.value ?? "";
+
+      if (!Number.isFinite(usernameId)) {
+        setMessage("Enter a numeric username (e.g., 1, 2, 3).");
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("id, info")
+          .eq("id", usernameId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data) {
+          setMessage("Incorrect username/password pair");
+          return;
+        }
+
+        const storedPassword = data.info;
+
+        if (password === storedPassword) {
+          goToMainPage();
+        } else {
+          setMessage("Incorrect username/password pair");
+        }
+      } catch (e) {
+        console.error(e);
+        setMessage("Login error (check console).");
+      }
+    }
+
+    loginBtn.addEventListener("click", handleLogin);
+
+    usernameEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+    passwordEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+  </script>
 </body>
 </html>
