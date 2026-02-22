@@ -113,49 +113,6 @@
       box-sizing: border-box;
     }
 
-    /* Hidden question toggle */
-    .question-toggle-wrap {
-      margin-top: 40px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .question-arrow {
-      width: 26px;
-      height: 26px;
-      border: none;
-      border-radius: 4px;
-      background: #000;
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Arial, sans-serif; /* default sans serif */
-    }
-
-    .question-arrow:hover {
-      background: #222;
-    }
-
-    .welcome-text {
-      text-align: center;
-      color: #111;
-      font-size: 10pt;
-      font-weight: 300;
-      letter-spacing: 0.3px;
-      margin: 0 20px;
-      display: none;
-    }
-
-    .welcome-text.show {
-      display: block;
-    }
-
     .large-textbox-container {
       display: flex;
       flex-direction: column;
@@ -173,6 +130,53 @@
       border-radius: 6px;
       box-sizing: border-box;
       resize: vertical;
+    }
+
+    /* Question row aligned to left border of large textbox */
+    .question-row {
+      width: 60%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      margin-top: 40px;
+      box-sizing: border-box;
+    }
+
+    .question-arrow {
+      width: 26px;
+      height: 26px;
+      border: none;
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif; /* default sans serif */
+      flex: 0 0 auto;
+    }
+
+    .question-arrow:hover {
+      background: #222;
+    }
+
+    .welcome-text {
+      color: #111;
+      font-size: 10pt;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+      margin: 0;
+      display: none;
+      text-align: left;
+      flex: 1 1 auto;
+    }
+
+    .welcome-text.show {
+      display: block;
     }
 
     .evaluate-button {
@@ -210,13 +214,11 @@
     <textarea class="small-textbox" placeholder=""></textarea>
   </div>
 
-  <!-- Hidden question behind a small black arrow -->
-  <div class="question-toggle-wrap">
-    <button class="question-arrow" id="questionArrow" aria-label="Show question">▾</button>
-  </div>
-
-  <div class="welcome-text" id="welcomeText">
-    List 5 psychiatric or medical conditions that can lead to memory impairment in older people?
+  <div class="question-row">
+    <button class="question-arrow" id="questionArrow" aria-label="Show question">▸</button>
+    <div class="welcome-text" id="welcomeText">
+      List 5 psychiatric or medical conditions that can lead to memory impairment in older people?
+    </div>
   </div>
 
   <div class="large-textbox-container">
@@ -232,7 +234,7 @@
 
     // Hidden master prompt (developer-defined, appended after user input)
     const MASTER_PROMPT = `
-     You are a helpful assistant that will always answer in English
+     For what is written before this. You need to compare it with this answer key between the quotation marks and only give points to answers that correspond to the answer key. "parkinson, vit b12 deficiency, syphillis, hypothyroidism, alzheimer". then at the very end of your response give me a mark out of 5.
     `;
 
     // Create a container for the response
@@ -306,13 +308,13 @@
       homePopup.classList.remove('show');
     });
 
-    // Small black arrow to show/hide the question text
+    // Small black arrow to show/hide the question text (right-pointing)
     const questionArrow = document.getElementById('questionArrow');
     const welcomeText = document.getElementById('welcomeText');
 
     questionArrow.addEventListener('click', () => {
       const isShown = welcomeText.classList.toggle('show');
-      questionArrow.textContent = isShown ? '▴' : '▾';
+      questionArrow.textContent = isShown ? '◂' : '▸';
     });
   </script>
 </body>
