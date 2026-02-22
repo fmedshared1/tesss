@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>First Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
-
   <style>
     body {
       margin: 0;
@@ -85,100 +84,15 @@
       background-color: #222;
     }
   </style>
-
-  <!-- Supabase via CDN (non-ESM) -->
-  <!-- Supabase docs recommend this CDN include.  [oai_citation:0‡Supabase](https://supabase.com/docs/reference/javascript/installing) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-
 <body>
   <div class="top-bar"></div>
 
   <div class="login-container">
     <h1>First Login</h1>
-
-    <input id="username" type="text" placeholder="Username (number)" autocomplete="username" />
-    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
-
-    <div id="message" style="min-height: 1.2em; color: #b00020; font-weight: 300;"></div>
-
-    <button id="loginBtn" type="button">Proceed</button>
+    <input type="text" placeholder="Username (number)" />
+    <input type="password" placeholder="Password" />
+    <button onclick="window.location.href='hello.html'">Proceed</button>
   </div>
-
-  <script>
-    // If you prefer ESM (+esm) imports, note there have been reported issues with jsDelivr +esm and supabase-js v2 in some setups.  [oai_citation:1‡GitHub](https://github.com/orgs/supabase/discussions/41118?utm_source=chatgpt.com)
-
-    // ✅ Put your Supabase project URL and anon key here:
-    const SUPABASE_URL = "https://ubfefmnialyjfvgpltfe.supabase.co";
-    const SUPABASE_ANON_KEY =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InViZmVmbW5pYWx5amZ2Z3BsdGZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI1NzcwNDksImV4cCI6MjA3ODE1MzA0OX0.TavsnW_vyrgpq-hy6U4maNi4tNU2aZ99uRExVJtLRU4";
-
-    // supabase-js loaded globally from CDN:
-    const { createClient } = window.supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const msg = document.getElementById("message");
-    const loginBtn = document.getElementById("loginBtn");
-    const usernameEl = document.getElementById("username");
-    const passwordEl = document.getElementById("password");
-
-    function setMessage(text) {
-      if (msg) msg.textContent = text || "";
-    }
-
-    function goToMainPage() {
-      window.location.href = "hello.html";
-    }
-
-    async function handleLogin() {
-      setMessage("");
-
-      // Username is numeric (1,2,3,4...), stored in users.id
-      const usernameId = Number(usernameEl.value);
-      const password = passwordEl.value ?? "";
-
-      if (!Number.isFinite(usernameId)) {
-        setMessage("Enter a numeric username (e.g., 1, 2, 3).");
-        return;
-      }
-
-      try {
-        // ✅ One query: fetch stored password from users.info
-        const { data, error } = await supabaseClient
-          .from("users")
-          .select("id, info")
-          .eq("id", usernameId)
-          .maybeSingle(); // null if not found
-
-        if (error) throw error;
-
-        if (!data) {
-          setMessage("Incorrect username/password pair");
-          return;
-        }
-
-        const storedPassword = data.info;
-
-        if (password === storedPassword) {
-          goToMainPage();
-        } else {
-          setMessage("Incorrect username/password pair");
-        }
-      } catch (e) {
-        console.error(e);
-        setMessage("Login error (check console).");
-      }
-    }
-
-    loginBtn.addEventListener("click", handleLogin);
-
-    // Optional: press Enter to submit from either input
-    usernameEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleLogin();
-    });
-    passwordEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleLogin();
-    });
-  </script>
 </body>
 </html>
