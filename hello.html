@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
   <title>HKUMED Final MB Prep</title>
+  
+  <!-- Load env.js FIRST (generated during Netlify build) -->
+  <script src="env.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -92,26 +96,7 @@
       background: #eaeaea;
     }
 
-    .textbox-container {
-      display: flex;
-      justify-content: flex-end;
-      margin: 10px 20px 0 20px;
-      gap: 8px;
-      flex-direction: column;
-      align-items: flex-end;
-    }
-
-    .small-textbox {
-      width: 200px;
-      height: 30px;
-      resize: none;
-      font-family: "Poppins", sans-serif;
-      font-size: 12pt;
-      padding: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
+    /* Removed .textbox-container and .small-textbox as they are no longer needed */
 
     .large-textbox-container {
       display: flex;
@@ -217,12 +202,7 @@
     <button class="logout-btn" onclick="window.location.href='index.html'">logout</button>
   </div>
 
-  <div class="textbox-container">
-    <textarea class="small-textbox" placeholder="API Key"></textarea>
-    <!-- Two extra non-functional textboxes -->
-    <textarea class="small-textbox" placeholder=""></textarea>
-    <textarea class="small-textbox" placeholder=""></textarea>
-  </div>
+  <!-- API Key textboxes removed -->
 
   <div class="question-row">
     <button class="question-arrow" id="questionArrow" aria-label="Show question">▸</button>
@@ -238,8 +218,10 @@
   </div>
 
   <script>
+    // ✅ Key comes from env.js (generated during Netlify build)
+    const DEEPSEEK_API_KEY = window.DEEPSEEK_API_KEY;
+
     // Grab elements
-    const apiKeyBox = document.querySelector('.small-textbox');
     const promptBox = document.querySelector('.large-textbox');
     const evaluateBtn = document.querySelector('.evaluate-button');
 
@@ -257,12 +239,14 @@
     promptBox.parentNode.appendChild(responseContainer);
 
     evaluateBtn.addEventListener('click', async () => {
-      const apiKey = apiKeyBox.value.trim();
       const userPrompt = promptBox.value.trim();
-      if (!apiKey) {
-        alert('Please enter your API key');
+      
+      // Check if the key was loaded from env.js
+      if (!DEEPSEEK_API_KEY) {
+        alert('Configuration error: DeepSeek API Key is missing. Check Netlify env variables.');
         return;
       }
+
       if (!userPrompt) {
         alert('Please enter a prompt');
         return;
@@ -278,7 +262,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + apiKey
+            'Authorization': 'Bearer ' + DEEPSEEK_API_KEY
           },
           body: JSON.stringify({
             model: 'deepseek-chat',
