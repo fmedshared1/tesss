@@ -1,315 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
-  <title>HKUMED Final MB Prep</title>
-  
-  <!-- Load env.js FIRST (generated during Netlify build) -->
-  <script src="env.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
+  <title>HKUMED Final MB Prep</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background-color: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+  <!-- Load env.js FIRST (generated during Netlify build) -->
+  <script src="env.js"></script>
 
-    .top-bar {
-      width: 100%;
-      height: 60px;
-      background-color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 14px;
-      box-sizing: border-box;
-      position: relative;
-    }
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-    /* Left arrow + tiny home popup */
-    .nav-left {
-      position: relative;
-      display: flex;
-      align-items: center;
-    }
+    .top-bar {
+      width: 100%;
+      height: 60px;
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      box-sizing: border-box;
+      position: relative;
+    }
 
-    .arrow-btn {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 18px;
-      line-height: 1;
-      cursor: pointer;
-      padding: 8px 10px;
-      border-radius: 4px;
-      font-family: "Poppins", sans-serif;
-    }
+    /* Left arrow + tiny home popup */
+    .nav-left {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
 
-    .arrow-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-    }
+    .arrow-btn {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 4px;
+      font-family: "Poppins", sans-serif;
+    }
 
-    .home-popup {
-      position: absolute;
-      top: 54px;
-      left: 0;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      padding: 6px 10px;
-      font-family: "Poppins", sans-serif;
-      font-size: 10pt;
-      color: #000;
-      text-decoration: none;
-      display: none;
-      white-space: nowrap;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-    }
+    .arrow-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
 
-    .home-popup:hover {
-      background: #f2f2f2;
-    }
+    .home-popup {
+      position: absolute;
+      top: 54px;
+      left: 0;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-family: "Poppins", sans-serif;
+      font-size: 10pt;
+      color: #000;
+      text-decoration: none;
+      display: none;
+      white-space: nowrap;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    }
 
-    .home-popup.show {
-      display: inline-block;
-    }
+    .home-popup:hover {
+      background: #f2f2f2;
+    }
 
-    /* Right logout button */
-    .logout-btn {
-      background: #fff;
-      color: #000;
-      border: none;
-      border-radius: 4px;
-      padding: 7px 12px;
-      font-family: Arial, sans-serif; /* default sans serif */
-      font-size: 11pt;
-      cursor: pointer;
-      line-height: 1;
-    }
+    .home-popup.show {
+      display: inline-block;
+    }
 
-    .logout-btn:hover {
-      background: #eaeaea;
-    }
+    /* Right logout button */
+    .logout-btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      border-radius: 4px;
+      padding: 7px 12px;
+      font-family: Arial, sans-serif; /* default sans serif */
+      font-size: 11pt;
+      cursor: pointer;
+      line-height: 1;
+    }
 
-    /* Removed .textbox-container and .small-textbox as they are no longer needed */
+    .logout-btn:hover {
+      background: #eaeaea;
+    }
 
-    .large-textbox-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-    }
+    /* Removed .textbox-container and .small-textbox as they are no longer needed */
 
-    .large-textbox {
-      width: 60%;
-      height: 300px;
-      font-family: "Poppins", sans-serif;
-      font-size: 12pt;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-      resize: vertical;
-    }
+    .large-textbox-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
 
-    /* ✅ GUARANTEED CENTERING:
-       Use a 5-column grid with explicit columns for:
-       [arrow][gap][CENTER AREA][gap][same-width spacer]
-       Because BOTH sides (arrow + gap) are mirrored, the center area is mathematically centered
-       to the exact same 60% width as the large textbox.
-    */
-    .question-row {
-      width: 60%;
-      margin: 40px auto 0 auto;  /* centered container, same as large textbox width */
-      display: grid;
-      grid-template-columns: 26px 8px 1fr 8px 26px;
-      align-items: center;
-      box-sizing: border-box;
-    }
+    .large-textbox {
+      width: 60%;
+      height: 300px;
+      font-family: "Poppins", sans-serif;
+      font-size: 12pt;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      resize: vertical;
+    }
 
-    .question-arrow {
-      grid-column: 1;
-      width: 26px;
-      height: 26px;
-      border: none;
-      border-radius: 4px;
-      background: #000;
-      color: #fff;
-      cursor: pointer;
-      font-size: 14px;
-      line-height: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-family: Arial, sans-serif; /* default sans serif */
-    }
+    /* ✅ GUARANTEED CENTERING:
+       Use a 5-column grid with explicit columns for:
+       [arrow][gap][CENTER AREA][gap][same-width spacer]
+       Because BOTH sides (arrow + gap) are mirrored, the center area is mathematically centered
+       to the exact same 60% width as the large textbox.
+    */
+    .question-row {
+      width: 60%;
+      margin: 40px auto 0 auto;  /* centered container, same as large textbox width */
+      display: grid;
+      grid-template-columns: 26px 8px 1fr 8px 26px;
+      align-items: center;
+      box-sizing: border-box;
+    }
 
-    .question-arrow:hover {
-      background: #222;
-    }
+    .question-arrow {
+      grid-column: 1;
+      width: 26px;
+      height: 26px;
+      border: none;
+      border-radius: 4px;
+      background: #000;
+      color: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif; /* default sans serif */
+    }
 
-    .welcome-text {
-      grid-column: 3;           /* the centered area */
-      color: #111;
-      font-size: 10pt;
-      font-weight: 300;
-      letter-spacing: 0.3px;
-      margin: 0;
-      display: none;
-      text-align: center;       /* center the text itself */
-    }
+    .question-arrow:hover {
+      background: #222;
+    }
 
-    .welcome-text.show {
-      display: block;
-    }
+    .welcome-text {
+      grid-column: 3;           /* the centered area */
+      color: #111;
+      font-size: 10pt;
+      font-weight: 300;
+      letter-spacing: 0.3px;
+      margin: 0;
+      display: none;
+      text-align: center;       /* center the text itself */
+    }
 
-    .question-spacer {
-      grid-column: 5;
-      width: 26px;
-      height: 26px;
-    }
+    .welcome-text.show {
+      display: block;
+    }
 
-    .evaluate-button {
-      margin-top: 8px;
-      width: 120px;
-      height: 40px;
-      background-color: #000;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-family: "Poppins", sans-serif;
-      font-size: 12pt;
-      cursor: pointer;
-    }
+    .question-spacer {
+      grid-column: 5;
+      width: 26px;
+      height: 26px;
+    }
 
-    .evaluate-button:hover {
-      background-color: #222;
-    }
-  </style>
+    .evaluate-button {
+      margin-top: 8px;
+      width: 120px;
+      height: 40px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-family: "Poppins", sans-serif;
+      font-size: 12pt;
+      cursor: pointer;
+    }
+
+    .evaluate-button:hover {
+      background-color: #222;
+    }
+  </style>
 </head>
 <body>
-  <div class="top-bar">
-    <div class="nav-left">
-      <button class="arrow-btn" id="arrowBtn" aria-label="Menu">←</button>
-      <a class="home-popup" id="homePopup" href="index.html">home</a>
-    </div>
+  <div class="top-bar">
+    <div class="nav-left">
+      <button class="arrow-btn" id="arrowBtn" aria-label="Menu">←</button>
+      <a class="home-popup" id="homePopup" href="index.html">home</a>
+    </div>
 
-    <button class="logout-btn" onclick="window.location.href='index.html'">logout</button>
-  </div>
+    <button class="logout-btn" onclick="window.location.href='index.html'">logout</button>
+  </div>
 
-  <!-- API Key textboxes removed -->
+  <!-- API Key textboxes removed -->
 
-  <div class="question-row">
-    <button class="question-arrow" id="questionArrow" aria-label="Show question">▸</button>
-    <div class="welcome-text" id="welcomeText">
-      List 5 psychiatric or medical conditions that can lead to memory impairment in older people?
-    </div>
-    <div class="question-spacer" aria-hidden="true"></div>
-  </div>
+  <div class="question-row">
+    <button class="question-arrow" id="questionArrow" aria-label="Show question">▸</button>
+    <div class="welcome-text" id="welcomeText">
+      List 5 psychiatric or medical conditions that can lead to memory impairment in older people?
+    </div>
+    <div class="question-spacer" aria-hidden="true"></div>
+  </div>
 
-  <div class="large-textbox-container">
-    <textarea class="large-textbox" placeholder="Start typing..."></textarea>
-    <button class="evaluate-button">Evaluate</button>
-  </div>
+  <div class="large-textbox-container">
+    <textarea class="large-textbox" placeholder="Start typing..."></textarea>
+    <button class="evaluate-button">Evaluate</button>
+  </div>
 
-  <script>
-    // ✅ Key comes from env.js (generated during Netlify build)
-    const DEEPSEEK_API_KEY = window.DEEPSEEK_API_KEY;
+  <script>
+    // ✅ Key comes from env.js (generated during Netlify build)
+    const DEEPSEEK_API_KEY = window.DEEPSEEK_API_KEY;
 
-    // Grab elements
-    const promptBox = document.querySelector('.large-textbox');
-    const evaluateBtn = document.querySelector('.evaluate-button');
+    // Grab elements
+    const promptBox = document.querySelector('.large-textbox');
+    const evaluateBtn = document.querySelector('.evaluate-button');
 
-    // Hidden master prompt (developer-defined, appended after user input)
-    const MASTER_PROMPT = `
-     You are a helpful assistant that will always answer in English 
-    `;
+    // Hidden master prompt (developer-defined, appended after user input)
+    const MASTER_PROMPT = `
+     You are a helpful assistant that will always answer in English . All you are is a Question and answer bot.
+    `;
 
-    // Create a container for the response
-    const responseContainer = document.createElement('div');
-    responseContainer.style.fontFamily = '"Poppins", sans-serif';
-    responseContainer.style.fontSize = '12pt';
-    responseContainer.style.color = '#111';
-    responseContainer.style.margin = '10px 20px';
-    promptBox.parentNode.appendChild(responseContainer);
+    // Create a container for the response
+    const responseContainer = document.createElement('div');
+    responseContainer.style.fontFamily = '"Poppins", sans-serif';
+    responseContainer.style.fontSize = '12pt';
+    responseContainer.style.color = '#111';
+    responseContainer.style.margin = '10px 20px';
+    promptBox.parentNode.appendChild(responseContainer);
 
-    evaluateBtn.addEventListener('click', async () => {
-      const userPrompt = promptBox.value.trim();
-      
-      // Check if the key was loaded from env.js
-      if (!DEEPSEEK_API_KEY) {
-        alert('Configuration error: DeepSeek API Key is missing. Check Netlify env variables.');
-        return;
-      }
+    evaluateBtn.addEventListener('click', async () => {
+      const userPrompt = promptBox.value.trim();
 
-      if (!userPrompt) {
-        alert('Please enter a prompt');
-        return;
-      }
+      // Check if the key was loaded from env.js
+      if (!DEEPSEEK_API_KEY) {
+        alert('Configuration error: DeepSeek API Key is missing. Check Netlify env variables.');
+        return;
+      }
 
-      // Clear previous response
-      responseContainer.textContent = 'Evaluating answer...';
+      if (!userPrompt) {
+        alert('Please enter a prompt');
+        return;
+      }
 
-      try {
-        const DEEPSEEK_BASE_URL = 'https://api.deepseek.com/v1';
+      // Clear previous response
+      responseContainer.textContent = 'Evaluating answer...';
 
-        const resp = await fetch(DEEPSEEK_BASE_URL + '/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + DEEPSEEK_API_KEY
-          },
-          body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: [
-              { role: 'system', content: MASTER_PROMPT },
-              { role: 'user', content: userPrompt }
-            ],
-            max_tokens: 4000,
-            stream: false
-          })
-        });
+      try {
+        const DEEPSEEK_BASE_URL = 'https://api.deepseek.com/v1';
 
-        if (!resp.ok) {
-          const err = await resp.json().catch(() => ({}));
-          responseContainer.textContent = 'Error: ' + (err.error?.message ?? resp.statusText);
-          return;
-        }
+        const resp = await fetch(DEEPSEEK_BASE_URL + '/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + DEEPSEEK_API_KEY
+          },
+          body: JSON.stringify({
+            model: 'deepseek-v4-flash',
+            messages: [
+              { role: 'system', content: MASTER_PROMPT },
+              { role: 'user', content: userPrompt }
+            ],
+            max_tokens: 4000,
+            stream: false
+          })
+        });
 
-        const data = await resp.json();
-        const reply = data.choices?.[0]?.message?.content ?? 'No response';
-        responseContainer.textContent = reply;
-      } catch (error) {
-        responseContainer.textContent = 'Fetch error: ' + error.message;
-      }
-    });
+        if (!resp.ok) {
+          const err = await resp.json().catch(() => ({}));
+          responseContainer.textContent = 'Error: ' + (err.error?.message ?? resp.statusText);
+          return;
+        }
 
-    // Arrow toggle for tiny "home" popup
-    const arrowBtn = document.getElementById('arrowBtn');
-    const homePopup = document.getElementById('homePopup');
+        const data = await resp.json();
+        const reply = data.choices?.[0]?.message?.content ?? 'No response';
+        responseContainer.textContent = reply;
+      } catch (error) {
+        responseContainer.textContent = 'Fetch error: ' + error.message;
+      }
+    });
 
-    arrowBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      homePopup.classList.toggle('show');
-    });
+    // Arrow toggle for tiny "home" popup
+    const arrowBtn = document.getElementById('arrowBtn');
+    const homePopup = document.getElementById('homePopup');
 
-    document.addEventListener('click', () => {
-      homePopup.classList.remove('show');
-    });
+    arrowBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      homePopup.classList.toggle('show');
+    });
 
-    // Small black arrow to show/hide the question text (right-pointing)
-    const questionArrow = document.getElementById('questionArrow');
-    const welcomeText = document.getElementById('welcomeText');
+    document.addEventListener('click', () => {
+      homePopup.classList.remove('show');
+    });
 
-    questionArrow.addEventListener('click', () => {
-      const isShown = welcomeText.classList.toggle('show');
-      questionArrow.textContent = isShown ? '◂' : '▸';
-    });
-  </script>
+    // Small black arrow to show/hide the question text (right-pointing)
+    const questionArrow = document.getElementById('questionArrow');
+    const welcomeText = document.getElementById('welcomeText');
+
+    questionArrow.addEventListener('click', () => {
+      const isShown = welcomeText.classList.toggle('show');
+      questionArrow.textContent = isShown ? '◂' : '▸';
+    });
+  </script>
 </body>
 </html>
