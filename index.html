@@ -1,184 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>First Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>First Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet" />
 
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background-color: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-    .top-bar {
-      width: 100%;
-      height: 60px;
-      background-color: #000;
-    }
+    .top-bar {
+      width: 100%;
+      height: 60px;
+      background-color: #000;
+    }
 
-    .login-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-    }
+    .login-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
 
-    h1 {
-      font-size: 32pt;
-      font-weight: 300;
-      color: #111;
-      letter-spacing: 0.5px;
-      margin-bottom: 10px;
-      text-transform: none;
-    }
+    h1 {
+      font-size: 32pt;
+      font-weight: 300;
+      color: #111;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      text-transform: none;
+    }
 
-    input {
-      width: 280px;
-      padding: 12px 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 14pt;
-      font-family: "Poppins", sans-serif;
-      font-weight: 300;
-      text-align: center;
-      outline: none;
-      transition: border 0.3s ease;
-      color: #333;
-    }
+    input {
+      width: 280px;
+      padding: 12px 14px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14pt;
+      font-family: "Poppins", sans-serif;
+      font-weight: 300;
+      text-align: center;
+      outline: none;
+      transition: border 0.3s ease;
+      color: #333;
+    }
 
-    input::placeholder {
-      color: #999;
-      font-weight: 300;
-    }
+    input::placeholder {
+      color: #999;
+      font-weight: 300;
+    }
 
-    input:focus {
-      border-color: #000;
-    }
+    input:focus {
+      border-color: #000;
+    }
 
-    button {
-      margin-top: 20px;
-      width: 280px;
-      padding: 12px;
-      background-color: #000;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16pt;
-      font-family: "Poppins", sans-serif;
-      font-weight: 300;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
+    button {
+      margin-top: 20px;
+      width: 280px;
+      padding: 12px;
+      background-color: #000;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 16pt;
+      font-family: "Poppins", sans-serif;
+      font-weight: 300;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
 
-    button:hover {
-      background-color: #222;
-    }
-  </style>
+    button:hover {
+      background-color: #222;
+    }
+  </style>
 
-  <!-- Load env.js FIRST (generated during Netlify build) -->
-  <script src="env.js"></script>
+  <!-- Load env.js FIRST (generated during Netlify build) -->
+  <script src="env.js"></script>
 
-  <!-- Supabase via CDN (non-ESM) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase via CDN (non-ESM) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-  <div class="top-bar"></div>
+  <div class="top-bar"></div>
 
-  <div class="login-container">
-    <h1>First Login</h1>
+  <div class="login-container">
+    <h1>First Login</h1>
 
-    <input id="username" type="text" placeholder="Username (number)" autocomplete="username" />
-    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
+    <input id="username" type="text" placeholder="Username (number)" autocomplete="username" />
+    <input id="password" type="password" placeholder="Password" autocomplete="current-password" />
 
-    <div id="message" style="min-height: 1.2em; color: #b00020; font-weight: 300;"></div>
+    <div id="message" style="min-height: 1.2em; color: #b00020; font-weight: 300;"></div>
 
-    <button id="loginBtn" type="button">Proceed</button>
-  </div>
+    <button id="loginBtn" type="button">Proceed</button>
+  </div>
 
-  <script>
-    // ✅ Keep ONLY the URL in this file
-    const SUPABASE_URL = "https://ubfefmnialahufhrwkERUfe.supabase.co";
+  <script>
+    // ✅ Keep ONLY the URL in this file
+    const SUPABASE_URL = "https://ubfefmnialyjfvgpltfe.supabase.co";
 
-    // ✅ Key comes from env.js (generated during Netlify build)
-    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
+    // ✅ Key comes from env.js (generated during Netlify build)
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 
-    const msg = document.getElementById("message");
-    const loginBtn = document.getElementById("loginBtn");
-    const usernameEl = document.getElementById("username");
-    const passwordEl = document.getElementById("password");
+    const msg = document.getElementById("message");
+    const loginBtn = document.getElementById("loginBtn");
+    const usernameEl = document.getElementById("username");
+    const passwordEl = document.getElementById("password");
 
-    function setMessage(text) {
-      if (msg) msg.textContent = text || "";
-    }
+    function setMessage(text) {
+      if (msg) msg.textContent = text || "";
+    }
 
-    function goToMainPage() {
-      window.location.href = "hello.html";
-    }
+    function goToMainPage() {
+      window.location.href = "siii.html";
+    }
 
-    if (!SUPABASE_ANON_KEY) {
-      setMessage("Missing SUPABASE_ANON_KEY (env.js not generated/loaded).");
-      console.error("SUPABASE_ANON_KEY missing. Check Netlify env var + build step that generates env.js.");
-    }
+    if (!SUPABASE_ANON_KEY) {
+      setMessage("Missing SUPABASE_ANON_KEY (env.js not generated/loaded).");
+      console.error("SUPABASE_ANON_KEY missing. Check Netlify env var + build step that generates env.js.");
+    }
 
-    const { createClient } = window.supabase;
-    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const { createClient } = window.supabase;
+    const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function handleLogin() {
-      setMessage("");
+    async function handleLogin() {
+      setMessage("");
 
-      // Username is numeric (1,2,3,4...), stored in users.id
-      const usernameId = Number(usernameEl.value);
-      const password = passwordEl.value ?? "";
+      // Username is numeric (1,2,3,4...), stored in users.id
+      const usernameId = Number(usernameEl.value);
+      const password = passwordEl.value ?? "";
 
-      if (!Number.isFinite(usernameId)) {
-        setMessage("Enter a numeric username (e.g., 1, 2, 3).");
-        return;
-      }
+      if (!Number.isFinite(usernameId)) {
+        setMessage("Enter a numeric username (e.g., 1, 2, 3).");
+        return;
+      }
 
-      try {
-        const { data, error } = await supabaseClient
-          .from("users")
-          .select("id, info")
-          .eq("id", usernameId)
-          .maybeSingle();
+      try {
+        const { data, error } = await supabaseClient
+          .from("users")
+          .select("id, info")
+          .eq("id", usernameId)
+          .maybeSingle();
 
-        if (error) throw error;
+        if (error) throw error;
 
-        if (!data) {
-          setMessage("Incorrect username/password pair");
-          return;
-        }
+        if (!data) {
+          setMessage("Incorrect username/password pair");
+          return;
+        }
 
-        const storedPassword = data.info;
+        const storedPassword = data.info;
 
-        if (password === storedPassword) {
-          goToMainPage();
-        } else {
-          setMessage("Incorrect username/password pair");
-        }
-      } catch (e) {
-        console.error(e);
-        setMessage("Login error (check console).");
-      }
-    }
+        if (password === storedPassword) {
+          goToMainPage();
+        } else {
+          setMessage("Incorrect username/password pair");
+        }
+      } catch (e) {
+        console.error(e);
+        setMessage("Login error (check console).");
+      }
+    }
 
-    loginBtn.addEventListener("click", handleLogin);
+    loginBtn.addEventListener("click", handleLogin);
 
-    usernameEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleLogin();
-    });
-    passwordEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleLogin();
-    });
-  </script>
+    usernameEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+    passwordEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleLogin();
+    });
+  </script>
 </body>
 </html>
